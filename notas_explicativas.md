@@ -1,82 +1,56 @@
 Notas Explicativas – Enriquecimento de Municípios via API do IBGE
-1. Objetivo
 
-Este projeto tem como objetivo enriquecer uma base de dados contendo nomes de municípios brasileiros com informações adicionais obtidas a partir da API pública do IBGE.
+1. Objetivo:
+Enriquecer uma base de municípios brasileiros com dados adicionais da API pública do IBGE, como nome oficial, estado (UF), região, mesorregião e microrregião, gerando um novo CSV com as informações.
 
-A partir do arquivo de entrada (CSV), o script consulta a API de localidades do IBGE e adiciona informações como:
+2. Fonte de dados:
+API pública do IBGE: https://servicodados.ibge.gov.br/api/docs/localidades
+, que fornece informações atualizadas sobre municípios, estados e regiões do Brasil.
 
-Nome oficial do município
+3. Pipeline resumido:
 
-Estado (UF)
+Leitura do CSV de entrada.
 
-Região
+Consulta à API do IBGE.
 
-Mesorregião
+Extração dos dados relevantes.
 
-Microrregião
+Enriquecimento da base original.
 
-O resultado final é salvo em um novo arquivo CSV contendo os dados originais acrescidos das informações obtidas da API.
+Exportação para novo CSV.
 
-2. Fonte de dados
+4. Tratamento de erros:
 
-Os dados são obtidos através da API pública do IBGE:
+Município não encontrado na API.
 
-https://servicodados.ibge.gov.br/api/docs/localidades
+Falhas de requisição HTTP.
 
-Essa API fornece informações atualizadas sobre municípios, estados e regiões do Brasil.
+Dados ausentes na resposta.
 
-3. Estrutura do pipeline
+Nestes casos, os campos adicionais são preenchidos como None ou vazio.
 
-O pipeline segue os seguintes passos:
+5. Limitações e erros observados:
 
-Leitura do arquivo CSV de entrada contendo municípios
+Diferenças de grafia entre CSV e nome oficial da API podem impedir o match automático (ex.: Brasileia e Santo André-SP), causando registros não enriquecidos.
 
-Consulta à API do IBGE para buscar os dados do município
+Dependência da disponibilidade da API.
 
-Extração das informações relevantes da resposta JSON
+Requisições sequenciais podem ser lentas para bases grandes.
 
-Enriquecimento da base original com os novos campos
+6. Possíveis melhorias:
 
-Exportação do resultado para um novo arquivo CSV
+Cache para reduzir chamadas repetidas.
 
-4. Tratamento de erros
+Paralelização das requisições.
 
-O script inclui tratamento para alguns cenários comuns:
+Normalização de texto para melhorar o matching.
 
-Município não encontrado na API
+Testes automatizados.
 
-Falhas de requisição HTTP
-
-Dados ausentes na resposta da API
-
-Nestes casos, o script mantém o registro original e preenche os campos adicionais como None ou vazio.
-
-5. Limitações conhecidas
-
-Algumas limitações do projeto incluem:
-
-Dependência da disponibilidade da API do IBGE
-
-Diferenças de grafia entre o nome do município no CSV e o nome oficial na API podem impedir o match automático
-
-O script realiza requisições sequenciais, o que pode impactar performance para bases muito grandes
-
-6. Possíveis melhorias
-
-Algumas melhorias possíveis seriam:
-
-Implementação de cache de municípios para reduzir chamadas repetidas à API
-
-Uso de paralelização para acelerar as requisições
-
-Implementação de normalização de texto para melhorar o matching de municípios
-
-Inclusão de testes automatizados
-
-7. Execução do projeto
-
-Para executar o script:
+7. Execução:
 
 python main.py
 
-O script irá ler o arquivo input.csv e gerar o arquivo resultado.csv.
+O script lê input.csv e gera resultado.csv.
+
+Se você quiser, eu posso fazer uma versão ainda mais resumida de 3-4 linhas, só com objetivo, erro e melhorias, perfeita para colocar direto nas anotações do trabalho. Quer que eu faça?
